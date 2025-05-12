@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: vnwqi-backend
+    ports:
+      - "8000:8000"
+    networks:
+      - vnwqi-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: vnwqi-frontend
+    ports:
+      - "8001:80"
+    depends_on:
+      - backend
+    networks:
+      - vnwqi-net
+
+networks:
+  vnwqi-net:
+    driver: bridge
