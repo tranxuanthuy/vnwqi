@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <div id="calc-result"></div>
+        <div id="wqi-map"></div>
       </section>
     `;
     initCalcWQI();

@@ -8,6 +8,14 @@
     margin: 0;
     padding: 0;
   }
+
+  footer {
+    margin-top: 40px;     /* tăng hoặc giảm px tuỳ ý */
+  }
+
+  .hero {
+    margin-bottom: 40px;
+  }
   
   body {
     font-family: 'Segoe UI', sans-serif;
@@ -115,30 +123,10 @@
     height: 2px;
     background-color: var(--primary);
     margin: 10px 0 20px;
+    margin-bottom: 20px;
   }
 
 /* Feature 1: calculate wqi */
-  #main-content {
-    padding: 60px 32px;
-    min-height: 300px;
-  }
-
-.result-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-.result-table th,
-.result-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-  }
-  
-.result-table th {
-    background-color: #f0f0f0;
-  }
 
   .card {
     border: 1px solid #ddd;
@@ -173,7 +161,7 @@
   }
 
   .centered-container {
-    max-width: 1000px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -184,16 +172,88 @@
   
   .btn-download {
     display: inline-block;
-    margin-top: 10px;
     padding: 8px 16px;
     background-color: var(--primary);
     color: white;
     text-decoration: none;
     border-radius: 6px;
+    width: 220px;
+    margin-bottom: 10px;
+    margin-top: 10px
   }
   
   .btn-download:hover {
     background-color: #0056b3;
+  }
+  
+  .status-message.success {
+    color: #2e7d32;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .btn-download {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  #wqi-map {
+    width: 100%;
+    max-width: 1300px;
+    height: 600px;
+    margin: 0 auto;
+
+  }
+  .wqi-map--has-border {
+    border: 3px solid var(--primary);
+    border-radius: 4px;   /* tuỳ chọn bo góc */
+    box-sizing: border-box;
+  }
+
+  .info.legend {
+    background: white;
+    padding: 8px;
+    line-height: 1.4;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    width: 300px;
+    font-size: 18px;
+  }
+  .info.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.8;
+  }
+
+  /* Tăng font-size và line-height cho nội dung popup */
+  .leaflet-popup-content {
+    font-size: 1rem;       /* hoặc 16px, 18px tuỳ bạn */
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  /* Tăng chiều rộng tối đa của popup */
+  .leaflet-popup-content-wrapper {
+    max-width: 300px;      /* thay đổi nếu muốn rộng hơn */
+  }
+
+  /* (Tuỳ chọn) Tăng padding bên trong */
+  .leaflet-popup-content-wrapper .leaflet-popup-content {
+    padding: 10px 14px;    /* top/bottom 10px, left/right 14px */
+  }
+
+  /* (Tuỳ chọn) Tăng kích thước mũi tên */
+  .leaflet-popup-tip-container .leaflet-popup-tip {
+    width: 16px;
+    height: 16px;
+    margin-left: 12px
   }
   
 
@@ -214,7 +274,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
 .wqi-form-container label {

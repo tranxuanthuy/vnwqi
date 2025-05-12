@@ -1,4 +1,8 @@
+import { initMap, plotWqiPoints } from './map_wqi.js';
 import { BASE_API_URL } from "./config.js";
+
+let mapObj = null;
+
 export function initCalcWQI() {
   const fileInput = document.getElementById("csv-file");
   const submitBtn = document.getElementById("submit-file");
@@ -34,6 +38,17 @@ export function initCalcWQI() {
 
         const result = await response.json();
         displayResult(result, resultBox);
+
+        // Delete old map if exists
+        if (mapObj) {
+          mapObj.map.remove();
+          mapObj = null;
+        }
+        // Initialize map and plot points
+        mapObj = initMap();
+        const mapContainer = document.getElementById('wqi-map');
+        mapContainer.classList.add('wqi-map--has-border');
+        plotWqiPoints(mapObj, result);
       } catch (error) {
         resultBox.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
       }
@@ -58,31 +73,27 @@ function parseCSV(csv) {
 }
 
 function displayResult(data, container) {
-  if (Array.isArray(data)) {
-    const table = document.createElement("table");
-    table.classList.add("result-table");
-
-    const headerRow = document.createElement("tr");
-    Object.keys(data[0]).forEach((key) => {
-      const th = document.createElement("th");
-      th.textContent = key;
-      headerRow.appendChild(th);
-    });
-    table.appendChild(headerRow);
-
-    data.forEach((row) => {
-      const tr = document.createElement("tr");
-      Object.values(row).forEach((value) => {
-        const td = document.createElement("td");
-        td.textContent = value;
-        tr.appendChild(td);
-      });
-      table.appendChild(tr);
-    });
-
-    container.innerHTML = "<h4>WQI Calculation Result</h4>";
-    container.appendChild(table);
-  } else {
-    container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+  if (!Array.isArray(data) || data.length === 0) {
+    container.innerHTML = `<div class="status-message">No data available.</div>`;
+    return;
   }
+
+  // Create CSV string
+  const csvContent = [
+    Object.keys(data[0]).join(","),                   // header
+    ...data.map(row => Object.values(row).join(",")) // rows
+  ].join("\n");
+
+  // Create blob and downloadable URL
+  const blob = new Blob([csvContent], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  // Build UI
+  container.innerHTML = `
+    <h4>✅ Processing complete!</h4>
+    <a id="download-csv" class="btn-download" href="${url}" download="wqi_results.csv">
+      📥 Download Results
+    </a>
+  `;
 }
+
