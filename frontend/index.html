@@ -18,13 +18,19 @@
     rel="stylesheet"
     href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
   />
+  <script>
+    window.ENV = {
+      BASE_API_URL: "http://localhost:8000/api",
+      VERSION: "1.0.0"
+    };
+  </script>
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="navbar">
     <div class="nav-container">
-      <a href="index.html">
+      <a href="https://geoportal.watertech.vn/">
         <img src="assets/logo5721.png" alt="Logo" class="logo"/>
       </a>
       <nav>

@@ -6,7 +6,7 @@ services:
       context: ./backend
     container_name: vnwqi-backend
     ports:
-      - "8000:8000"
+      - "${BE_FORWARD_PORT}:8000"
     networks:
       - vnwqi-net
 
@@ -14,8 +14,10 @@ services:
     build:
       context: ./frontend
     container_name: vnwqi-frontend
+    environment:
+      - BASE_API_URL=${BASE_API_URL}
     ports:
-      - "8001:80"
+      - "${FE_FORWARD_PORT}:80"
     depends_on:
       - backend
     networks:

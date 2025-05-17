@@ -1,2 +1,2 @@
-const BASE_API_URL = "http://localhost:8000";
+const BASE_API_URL = window.ENV.BASE_API_URL || '/api';
 export { BASE_API_URL };
