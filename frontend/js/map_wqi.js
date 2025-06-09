@@ -1,10 +1,10 @@
 // js/map_wqi.js
 export function initMap(center = [10.6, 106.7], zoom = 7) {
     const map = L.map('wqi-map').setView(center, zoom);
-  
-    // Base layers
-    const osm = L.tileLayer('https://maps.becagis.vn/tiles/basemap/light/{z}/{x}/{y}.png', {
-      attribution: '© BecaGIS Maps'
+
+    var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
     }).addTo(map);
   
     const satellite = L.tileLayer(
@@ -12,8 +12,30 @@ export function initMap(center = [10.6, 106.7], zoom = 7) {
       { attribution: 'NASA' }
     );
   
-    const baseLayers = { 'OSM Light': osm, 'Satellite': satellite };
+    const baseLayers = { 'Google Streets': googleStreets, 'Satellite': satellite };
     const overlays = {};  // sẽ thêm layer cluster sau
+// add Vietnam boundary layer
+    fetch('/assets/data/vietnam.geojson')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(geojson_data => {
+            L.geoJSON(geojson_data, {
+                style: function(feature) {
+                    return {
+                        color: "gray", 
+                        weight: 2, 
+                        opacity: 1, 
+                        fillColor: "lightblue", 
+                        fillOpacity: 0.3 
+                    };
+                }
+            }).addTo(map);
+        })
+        .catch(error => console.error('Lỗi khi tải hoặc xử lý GeoJSON:', error));
   
     // Control layer
     L.control.layers(baseLayers, overlays).addTo(map);
