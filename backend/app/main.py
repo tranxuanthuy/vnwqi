@@ -5,6 +5,7 @@ import pandas as pd
 from app.features.vnwqi_calculation.dss1_main import calculate_wqi_for_df
 from app.features.vnwqi_prediction.main import predict
 from app.features.vnwqi_prediction.levels import wqi_level, wqi_color
+from app.features.vnwqi_forcasting.main import forecast
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder
@@ -61,3 +62,20 @@ async def predict_wq(input_data: PredictWQInput):
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error while processing data : {str(e)}")
+
+
+class ForcastWQIInput(BaseModel):
+    longitude: float
+    latitude: float
+
+df4forcast = pd.read_csv("app/features/vnwqi_forcasting/data/wqi_prepared.csv")
+
+@app.post("/forcast_wqi")
+async def forecast_wqi(input_data: ForcastWQIInput):
+    try:
+        forecasted_wqi = forecast(input_data.longitude, input_data.latitude, df4forcast=df4forcast)
+        return {
+            "forecasted_wqi": forecasted_wqi
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error while processing data: {str(e)}")
