@@ -51,4 +51,4 @@ def vnwqi(input_dict):
         return {"WQI": None,
                 "Note": "Lỗi trong quá trình tính toán WQI. Vui lòng kiểm tra lại dữ liệu đầu vào."}
     return {"WQI": wqi,
-                "Note": None}
+            "Note": None}
