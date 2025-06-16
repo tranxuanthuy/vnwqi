@@ -6,3 +6,6 @@ __pycache__/
 # Others
 *.log
 .DS_Store
+
+# env
+.env

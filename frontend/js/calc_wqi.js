@@ -79,13 +79,14 @@ function displayResult(data, container) {
   }
 
   // Create CSV string
+  const BOM = '\uFEFF';
   const csvContent = [
     Object.keys(data[0]).join(","),                   // header
     ...data.map(row => Object.values(row).join(",")) // rows
   ].join("\n");
 
   // Create blob and downloadable URL
-  const blob = new Blob([csvContent], { type: "text/csv" });
+  const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
   // Build UI
