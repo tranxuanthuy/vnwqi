@@ -67,12 +67,23 @@ function displayforcast(data, container) {
 
   container.innerHTML = `<div id="wqi-history-chart" style="height: 600px; margin-top: 20px;"></div>`;
 
+  const traceCI = {
+    x: [...forecastDates.map(formatDateLocal), ...forecastDates.map(formatDateLocal).reverse()],
+    y: [...forecastUpper, ...forecastLower.slice().reverse()],
+    fill: 'toself',
+    fillcolor: 'rgba(0, 255, 255, 0.4)',
+    line: { color: 'rgba(255, 255, 255, 0)' },
+    name: 'Khoảng tin cậy',
+    type: 'scatter',
+    hoverinfo: 'skip'
+  };
+  
   const traceHistory = {
     x: dates,
     y: values,
     mode: 'lines+markers',
     name: 'History WQI',
-    line: { color: '#1f77b4', width: 3 },
+    line: { color: 'navy', width: 2 },
     marker: { size: 6 }
   };
 
@@ -81,8 +92,8 @@ function displayforcast(data, container) {
     y: forecastValues,
     mode: 'lines+markers',
     name: 'Forecast WQI',
-    line: { color: '#ff7f0e', width: 3, dash: 'dot' },
-    marker: { size: 8, symbol: 'diamond' }
+    line: { color: 'crimson', width: 2, dash: 'dash' },
+    marker: { size: 8 }
   };
 
   const traceConnect = {
@@ -90,22 +101,11 @@ function displayforcast(data, container) {
     y: [values[values.length - 1], forecastValues[0]],
     mode: 'lines',
     name: 'Nối lịch sử và dự báo',
-    line: { color: '#ff7f0e', width: 2, dash: 'dot' },
+    line: { color: 'crimson', width: 2, dash: 'dash' },
     showlegend: false,
     hoverinfo: 'skip'
   };
-
-  const traceCI = {
-    x: [...forecastDates.map(formatDateLocal), ...forecastDates.map(formatDateLocal).reverse()],
-    y: [...forecastUpper, ...forecastLower.slice().reverse()],
-    fill: 'toself',
-    fillcolor: 'rgba(255, 127, 14, 0.5)',
-    line: { color: 'transparent' },
-    name: 'Khoảng tin cậy',
-    type: 'scatter',
-    hoverinfo: 'skip'
-  };
-
+  
   // Thêm trace để tô màu khu vực nối giữa lịch sử và dự báo
   const traceTransitionArea = {
     x: [
@@ -121,7 +121,7 @@ function displayforcast(data, container) {
       values[values.length - 1] // Quay lại giá trị cuối của lịch sử
     ],
     fill: 'toself',
-    fillcolor: 'rgba(255, 127, 14, 0.5)', // Sử dụng cùng màu với khoảng tin cậy
+    fillcolor: 'rgba(0, 255, 255, 0.4)',
     line: { color: 'transparent' },
     name: 'Khu vực nối',
     type: 'scatter',
@@ -129,25 +129,25 @@ function displayforcast(data, container) {
     showlegend: false
   };
 
-  const traceHoverUpper = {
-    x: forecastDates.map(formatDateLocal),
-    y: forecastUpper,
-    mode: 'markers',
-    name: 'Giới hạn trên',
-    marker: { size: 1, color: 'rgba(255,127,14,0.01)' },
-    hovertemplate: 'Giới hạn trên: %{y:.2f}<extra></extra>',
-    showlegend: false
-  };
+  // const traceHoverUpper = {
+  //   x: forecastDates.map(formatDateLocal),
+  //   y: forecastUpper,
+  //   mode: 'markers',
+  //   name: 'Giới hạn trên',
+  //   marker: { size: 1, color: 'rgba(255,127,14,0.01)' },
+  //   hovertemplate: 'Giới hạn trên: %{y:.2f}<extra></extra>',
+  //   showlegend: false
+  // };
 
-  const traceHoverLower = {
-    x: forecastDates.map(formatDateLocal),
-    y: forecastLower,
-    mode: 'markers',
-    name: 'Giới hạn dưới',
-    marker: { size: 1, color: 'rgba(255,127,14,0.01)' },
-    hovertemplate: 'Giới hạn dưới: %{y:.2f}<extra></extra>',
-    showlegend: false
-  };
+  // const traceHoverLower = {
+  //   x: forecastDates.map(formatDateLocal),
+  //   y: forecastLower,
+  //   mode: 'markers',
+  //   name: 'Giới hạn dưới',
+  //   marker: { size: 1, color: 'rgba(255,127,14,0.01)' },
+  //   hovertemplate: 'Giới hạn dưới: %{y:.2f}<extra></extra>',
+  //   showlegend: false
+  // };
 
   const layout = {
     title: 'WQI forcasting chart',
@@ -170,12 +170,13 @@ function displayforcast(data, container) {
   };
 
   Plotly.newPlot('wqi-history-chart', [
-    traceHistory,
-    traceConnect,
-    traceForecast,
+    traceTransitionArea,
     traceCI,
+    traceConnect,
+    traceHistory,
+    traceForecast,
     // traceHoverUpper,
     // traceHoverLower,
-    traceTransitionArea // Giữ trace khu vực nối
+     // Giữ trace khu vực nối
   ], layout);
 }
